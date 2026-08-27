@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1020" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Room Capture Scanner</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="app">
+    <section id="setup" class="panel setup-panel">
+      <div class="eyebrow">ROOM CAPTURE SCANNER</div>
+      <h1>Capture sharp, overlapping photos for 3D.</h1>
+      <p class="lead">This tool guides the scan, rejects blurry/duplicate frames, and saves a ZIP of the accepted photos. Nothing is uploaded.</p>
+
+      <div class="checklist">
+        <label><input type="checkbox" class="precheck"> Clean the camera lens</label>
+        <label><input type="checkbox" class="precheck"> Turn on the room lights</label>
+        <label><input type="checkbox" class="precheck"> Use the rear 1× camera</label>
+        <label><input type="checkbox" class="precheck"> Keep people/pets out of the room</label>
+        <label><input type="checkbox" class="precheck"> Avoid fast pans and standing in one spot</label>
+      </div>
+
+      <div class="controls-row">
+        <label class="toggle"><input id="voiceToggle" type="checkbox" checked> Voice coach</label>
+        <label class="toggle"><input id="autoToggle" type="checkbox" checked> Auto capture</label>
+      </div>
+
+      <button id="startBtn" class="primary" disabled>Start scan</button>
+      <div class="privacy">Camera access stays in your browser. Photos are kept locally until you export or reset.</div>
+    </section>
+
+    <section id="scanner" class="scanner hidden">
+      <video id="video" playsinline muted autoplay></video>
+      <canvas id="analysisCanvas" class="hidden-canvas"></canvas>
+      <canvas id="captureCanvas" class="hidden-canvas"></canvas>
+
+      <div class="topbar glass">
+        <div>
+          <div class="step-label" id="stepLabel">Step 1</div>
+          <div class="step-title" id="stepTitle">Start in a corner</div>
+        </div>
+        <div class="count-badge"><span id="acceptedCount">0</span>/<span id="targetCount">90</span></div>
+      </div>
+
+      <div class="guide-frame">
+        <div class="guide-dot"></div>
+      </div>
+
+      <div id="warning" class="warning hidden">Move slower</div>
+
+      <div class="coach-card glass">
+        <div id="coachText" class="coach-text">Stand in a corner. Point toward the room and take one small step between captures.</div>
+        <div class="metrics">
+          <span>Sharp <b id="sharpnessVal">—</b></span>
+          <span>Light <b id="lightVal">—</b></span>
+          <span>Change <b id="changeVal">—</b></span>
+        </div>
+        <div class="progress"><div id="progressBar"></div></div>
+      </div>
+
+      <div class="bottom-actions">
+        <button id="manualCaptureBtn" class="capture-btn" aria-label="Capture photo"><span></span></button>
+        <button id="pauseBtn" class="secondary">Pause</button>
+        <button id="finishBtn" class="secondary danger">Finish</button>
+      </div>
+    </section>
+
+    <section id="results" class="panel hidden">
+      <div class="eyebrow">SCAN COMPLETE</div>
+      <h2>Photos ready for the 3D pipeline.</h2>
+      <div class="summary-grid">
+        <div><span>Accepted</span><strong id="sumAccepted">0</strong></div>
+        <div><span>Blur rejected</span><strong id="sumBlur">0</strong></div>
+        <div><span>Duplicate rejected</span><strong id="sumDup">0</strong></div>
+        <div><span>Duration</span><strong id="sumDuration">0:00</strong></div>
+      </div>
+      <button id="downloadBtn" class="primary">Download scan ZIP</button>
+      <button id="restartBtn" class="secondary full">Start over</button>
+      <p class="privacy">ZIP contains numbered JPEGs plus <code>scan_manifest.json</code>.</p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
