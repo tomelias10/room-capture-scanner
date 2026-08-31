@@ -14,7 +14,7 @@ const DAILY_BUDGET_MICROS = 20_000_000; // 20.00
 // Fill in real Google geo target constants per city before running the
 // Google Ads part (see comment in src/lib/ads/googleAds.ts).
 const GEO_TARGET_CONSTANTS: Record<string, string> = {
-  // "tel-aviv": "geoTargetConstants/1000080",
+  // "new-york": "geoTargetConstants/<look up the real ID for this city>",
 };
 
 async function main() {
@@ -54,7 +54,7 @@ async function main() {
           name,
           landingPageUrl,
           headline,
-          description: "השאירו פרטים וקבלו הצעת מחיר תוך דקות ממספר ספקים.",
+          description: "Leave your details and get a quote in minutes from vetted providers.",
           geoTargetConstant: geoTarget,
           dailyBudgetMicros: DAILY_BUDGET_MICROS,
         });

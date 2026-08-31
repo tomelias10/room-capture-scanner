@@ -1,10 +1,13 @@
 // Config-driven landing pages: every (city x shipment type) combination
 // gets its own route at /lp/[slug] without duplicating any code.
-// Extend CITIES / SHIPMENT_TYPES to add more pages or other countries.
+// Extend CITIES / SHIPMENT_TYPES to add more cities or countries - the
+// platform itself is global, this list just picks which cities get a
+// dedicated SEO/ads landing page.
 
 export type City = {
   id: string;
   name: string;
+  country: string;
   lat: number;
   lng: number;
 };
@@ -17,53 +20,53 @@ export type ShipmentType = {
 };
 
 export const CITIES: City[] = [
-  { id: "tel-aviv", name: "תל אביב", lat: 32.0853, lng: 34.7818 },
-  { id: "jerusalem", name: "ירושלים", lat: 31.7683, lng: 35.2137 },
-  { id: "haifa", name: "חיפה", lat: 32.794, lng: 34.9896 },
-  { id: "beer-sheva", name: "באר שבע", lat: 31.253, lng: 34.7915 },
-  { id: "netanya", name: "נתניה", lat: 32.3215, lng: 34.8532 },
-  { id: "ashdod", name: "אשדוד", lat: 31.8044, lng: 34.6553 },
-  { id: "rishon-lezion", name: "ראשון לציון", lat: 31.973, lng: 34.7925 },
-  { id: "petah-tikva", name: "פתח תקווה", lat: 32.084, lng: 34.8878 },
-  { id: "holon", name: "חולון", lat: 32.0117, lng: 34.7736 },
-  { id: "ramat-gan", name: "רמת גן", lat: 32.0684, lng: 34.8248 },
+  { id: "new-york", name: "New York", country: "United States", lat: 40.7128, lng: -74.006 },
+  { id: "london", name: "London", country: "United Kingdom", lat: 51.5074, lng: -0.1278 },
+  { id: "dubai", name: "Dubai", country: "United Arab Emirates", lat: 25.2048, lng: 55.2708 },
+  { id: "singapore", name: "Singapore", country: "Singapore", lat: 1.3521, lng: 103.8198 },
+  { id: "toronto", name: "Toronto", country: "Canada", lat: 43.6532, lng: -79.3832 },
+  { id: "sydney", name: "Sydney", country: "Australia", lat: -33.8688, lng: 151.2093 },
+  { id: "berlin", name: "Berlin", country: "Germany", lat: 52.52, lng: 13.405 },
+  { id: "mumbai", name: "Mumbai", country: "India", lat: 19.076, lng: 72.8777 },
+  { id: "sao-paulo", name: "São Paulo", country: "Brazil", lat: -23.5505, lng: -46.6333 },
+  { id: "tokyo", name: "Tokyo", country: "Japan", lat: 35.6762, lng: 139.6503 },
 ];
 
 export const SHIPMENT_TYPES: ShipmentType[] = [
   {
     id: "local-delivery",
-    label: "משלוחים מקומיים",
-    headline: (city) => `משלוחים מקומיים מהירים ב${city}`,
+    label: "Local Delivery",
+    headline: (city) => `Fast local delivery in ${city}`,
     description: (city) =>
-      `השוואת מחירים בין ספקי משלוחים מקומיים מאומתים ב${city} - קבלו הצעת מחיר תוך דקות.`,
+      `Compare quotes from vetted local courier providers in ${city} - get a price in minutes.`,
   },
   {
     id: "apartment-moving",
-    label: "הובלת דירה",
-    headline: (city) => `הובלת דירה מקצועית ב${city}`,
+    label: "Apartment Moving",
+    headline: (city) => `Professional apartment moving in ${city}`,
     description: (city) =>
-      `מחפשים הובלת דירה ב${city}? נתאים לכם חברת הובלות מקומית לפי היקף ותקציב.`,
+      `Looking to move apartments in ${city}? We'll match you with a local mover that fits your budget.`,
   },
   {
     id: "international-shipping",
-    label: "משלוחים בינלאומיים",
-    headline: (city) => `משלוחים בינלאומיים מ${city} לכל העולם`,
+    label: "International Shipping",
+    headline: (city) => `International shipping from ${city} worldwide`,
     description: (city) =>
-      `שילוח בינלאומי מ${city} - ספקים מאומתים למשלוחי חבילות ומטענים לחו"ל.`,
+      `Ship packages and freight from ${city} anywhere in the world with a vetted logistics provider.`,
   },
   {
     id: "furniture-delivery",
-    label: "משלוחי רהיטים",
-    headline: (city) => `משלוחי רהיטים וציוד כבד ב${city}`,
+    label: "Furniture Delivery",
+    headline: (city) => `Furniture and heavy item delivery in ${city}`,
     description: (city) =>
-      `הובלת רהיטים וציוד כבד ב${city} בבטחה ובמחיר הוגן - השוואה בין ספקים.`,
+      `Safe, fairly-priced furniture and heavy equipment delivery in ${city} - compare providers.`,
   },
   {
     id: "business-delivery",
-    label: "משלוחים עסקיים (B2B)",
-    headline: (city) => `פתרונות משלוחים עסקיים ב${city}`,
+    label: "Business Delivery (B2B)",
+    headline: (city) => `Business delivery solutions in ${city}`,
     description: (city) =>
-      `פתרונות לוגיסטיקה ומשלוחים עסקיים ב${city} לעסקים קטנים ובינוניים.`,
+      `Logistics and delivery solutions in ${city} for small and mid-sized businesses.`,
   },
 ];
 

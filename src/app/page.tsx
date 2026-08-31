@@ -5,19 +5,19 @@ export default function HomePage() {
   return (
     <main className="page">
       <div className="hero">
-        <h1>פלטפורמת לידים למשלוחים</h1>
+        <h1>Delivery Leads Platform</h1>
         <p>
-          {LANDING_PAGES.length} דפי נחיתה ממוקדי עיר וסוג משלוח, לבדיקה
-          ולקישור מקמפיינים ממומנים.
+          {LANDING_PAGES.length} city + shipment-type landing pages for
+          testing and linking from campaigns.
         </p>
         <p>
-          <Link href="/blog">מדריכים ומאמרים →</Link>
+          <Link href="/blog">Guides & articles →</Link>
         </p>
       </div>
       <div className="index-list">
         {LANDING_PAGES.map((p) => (
           <Link key={p.slug} href={`/lp/${p.slug}`}>
-            {p.shipmentType.label} · {p.city.name}
+            {p.shipmentType.label} · {p.city.name}, {p.city.country}
           </Link>
         ))}
       </div>

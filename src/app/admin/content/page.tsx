@@ -11,34 +11,34 @@ export default async function AdminContentPage() {
   return (
     <main className="page">
       <div className="hero">
-        <h1>לוח תוכן אורגני</h1>
+        <h1>Organic content calendar</h1>
         <p>
-          {posts.length} פוסטים מתוזמנים לעמוד הפייסבוק, האינסטגרם ופרופיל
-          העסק בגוגל שבבעלותכם.
+          {posts.length} posts scheduled for your own Facebook Page,
+          Instagram, and Google Business Profile.
         </p>
       </div>
       <div className="card" style={{ overflowX: "auto" }}>
         <table className="admin-table">
           <thead>
             <tr>
-              <th>מתוזמן ל</th>
-              <th>ערוץ</th>
-              <th>תוכן</th>
-              <th>סטטוס</th>
-              <th>פורסם ב</th>
+              <th>Scheduled for</th>
+              <th>Channel</th>
+              <th>Content</th>
+              <th>Status</th>
+              <th>Posted at</th>
             </tr>
           </thead>
           <tbody>
             {posts.map((post) => (
               <tr key={post.id}>
-                <td>{post.scheduledFor.toLocaleString("he-IL")}</td>
+                <td>{post.scheduledFor.toLocaleString("en-US")}</td>
                 <td>{post.platform}</td>
                 <td style={{ maxWidth: 360, whiteSpace: "pre-wrap" }}>
                   {post.content.slice(0, 120)}
                   {post.content.length > 120 ? "…" : ""}
                 </td>
                 <td>{post.status}</td>
-                <td>{post.postedAt ? post.postedAt.toLocaleString("he-IL") : "-"}</td>
+                <td>{post.postedAt ? post.postedAt.toLocaleString("en-US") : "-"}</td>
               </tr>
             ))}
           </tbody>

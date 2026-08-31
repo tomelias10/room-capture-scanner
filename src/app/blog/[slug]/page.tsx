@@ -28,7 +28,7 @@ export function generateMetadata({
       url,
       siteName: SITE_NAME,
       type: "article",
-      locale: "he_IL",
+      locale: "en_US",
     },
   };
 }
@@ -59,7 +59,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       />
       <div className="hero">
         <h1>{post.title}</h1>
-        <p>{new Date(post.publishedAt).toLocaleDateString("he-IL")}</p>
+        <p>{new Date(post.publishedAt).toLocaleDateString("en-US")}</p>
       </div>
       <article className="card" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
         {post.paragraphs.map((p, i) => (
@@ -71,11 +71,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
       {relatedPages.length > 0 && (
         <div className="card" style={{ marginTop: 20 }}>
-          <h3 style={{ marginTop: 0 }}>קבלו הצעת מחיר באזור שלכם</h3>
+          <h3 style={{ marginTop: 0 }}>Get a quote in your area</h3>
           <div className="index-list">
             {relatedPages.map((p) => (
               <Link key={p.slug} href={`/lp/${p.slug}`}>
-                {p.shipmentType.label} · {p.city.name}
+                {p.shipmentType.label} · {p.city.name}, {p.city.country}
               </Link>
             ))}
           </div>

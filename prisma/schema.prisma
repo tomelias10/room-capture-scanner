@@ -15,6 +15,7 @@ model Supplier {
   name          String
   phone         String
   category      String // matches LandingPageConfig.shipmentType, e.g. "local_delivery"
+  country       String // e.g. "United States" - used to prefer in-country matches
   commissionPct Float // e.g. 0.10 = 10%
   lat           Float
   lng           Float
@@ -29,6 +30,7 @@ model Lead {
   phone        String
   email        String?
   region       String
+  country      String?
   shipmentType String
   address      String?
   lat          Float?

@@ -23,12 +23,12 @@ export async function notifyNewLead(details: {
   }
 
   const text = [
-    "ליד חדש!",
-    `שם: ${details.name}`,
-    `טלפון: ${details.phone}`,
-    `אזור: ${details.region}`,
-    `סוג משלוח: ${details.shipmentType}`,
-    details.supplierName ? `ספק מותאם: ${details.supplierName}` : null,
+    "New lead!",
+    `Name: ${details.name}`,
+    `Phone: ${details.phone}`,
+    `Region: ${details.region}`,
+    `Shipment type: ${details.shipmentType}`,
+    details.supplierName ? `Matched supplier: ${details.supplierName}` : null,
   ]
     .filter(Boolean)
     .join("\n");
@@ -51,7 +51,7 @@ export async function notifyNewLead(details: {
         // type: "template",
         // template: {
         //   name: "new_lead_alert",
-        //   language: { code: "he" },
+        //   language: { code: "en" },
         //   components: [{ type: "body", parameters: [...] }],
         // },
       }),

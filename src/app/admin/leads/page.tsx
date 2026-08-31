@@ -12,31 +12,33 @@ export default async function AdminLeadsPage() {
   return (
     <main className="page">
       <div className="hero">
-        <h1>לידים</h1>
-        <p>{leads.length} לידים אחרונים</p>
+        <h1>Leads</h1>
+        <p>{leads.length} recent leads</p>
       </div>
       <div className="card" style={{ overflowX: "auto" }}>
         <table className="admin-table">
           <thead>
             <tr>
-              <th>תאריך</th>
-              <th>שם</th>
-              <th>טלפון</th>
-              <th>אזור</th>
-              <th>סוג משלוח</th>
-              <th>מקור</th>
-              <th>ספק מותאם</th>
-              <th>עמלה משוערת</th>
-              <th>סטטוס עסקה</th>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Region</th>
+              <th>Country</th>
+              <th>Shipment type</th>
+              <th>Source</th>
+              <th>Matched supplier</th>
+              <th>Est. commission</th>
+              <th>Deal status</th>
             </tr>
           </thead>
           <tbody>
             {leads.map((lead) => (
               <tr key={lead.id}>
-                <td>{lead.createdAt.toLocaleString("he-IL")}</td>
+                <td>{lead.createdAt.toLocaleString("en-US")}</td>
                 <td>{lead.name}</td>
                 <td>{lead.phone}</td>
                 <td>{lead.region}</td>
+                <td>{lead.country ?? "-"}</td>
                 <td>{lead.shipmentType}</td>
                 <td>{lead.source}</td>
                 <td>{lead.deal?.supplier.name ?? "-"}</td>

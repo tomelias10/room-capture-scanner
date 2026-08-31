@@ -25,7 +25,7 @@ export function LeadForm({
     const consent = form.get("consent") === "on";
     if (!consent) {
       setStatus("error");
-      setErrorMsg("יש לאשר קבלת פנייה כדי להמשיך.");
+      setErrorMsg("Please accept to be contacted before continuing.");
       return;
     }
 
@@ -48,47 +48,49 @@ export function LeadForm({
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "שליחה נכשלה");
+        throw new Error(data.error || "Submission failed");
       }
       setStatus("sent");
     } catch (err) {
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "שליחה נכשלה");
+      setErrorMsg(err instanceof Error ? err.message : "Submission failed");
     }
   }
 
   if (status === "sent") {
     return (
       <p className="lead-form-success">
-        תודה! קיבלנו את הפרטים ונחזור אליך בהקדם עם הצעת מחיר.
+        Thanks! We received your details and will get back to you shortly
+        with a quote.
       </p>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="lead-form" dir="rtl">
+    <form onSubmit={handleSubmit} className="lead-form">
       <label>
-        שם מלא
+        Full name
         <input name="name" required minLength={2} />
       </label>
       <label>
-        טלפון
-        <input name="phone" required pattern="^0[0-9\-\s]{8,}$" />
+        Phone (with country code, e.g. +1 555 123 4567)
+        <input name="phone" required pattern="^\+?[0-9\-\s()]{6,}$" />
       </label>
       <label>
-        אימייל (לא חובה)
+        Email (optional)
         <input name="email" type="email" />
       </label>
       <label>
-        כתובת (אופציונלי, עוזר להתאים ספק קרוב)
+        Address (optional, helps us match a nearby provider)
         <input name="address" />
       </label>
       <label className="consent">
         <input type="checkbox" name="consent" required />
-        אני מאשר/ת קבלת פנייה טלפונית/הודעה לגבי הצעת מחיר בנושא זה
+        I agree to be contacted by phone/message about a quote for this
+        request
       </label>
       <button type="submit" disabled={status === "sending"}>
-        {status === "sending" ? "שולח..." : "קבל הצעת מחיר"}
+        {status === "sending" ? "Sending..." : "Get a quote"}
       </button>
       {status === "error" && <p className="lead-form-error">{errorMsg}</p>}
     </form>

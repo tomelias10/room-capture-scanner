@@ -5,11 +5,11 @@ import { BlogPost } from "@/lib/blog";
 import { SITE_URL } from "@/lib/site";
 
 const OPENERS = [
-  "מחפשים",
-  "צריכים",
-  "יוצאים לדרך עם",
-  "השוואת מחירים ל",
-  "עדכון:",
+  "Looking for",
+  "Need",
+  "Getting started with",
+  "Compare quotes for",
+  "Update:",
 ];
 
 export function generateLandingPageCaption(
@@ -19,9 +19,9 @@ export function generateLandingPageCaption(
   const opener = OPENERS[variantIndex % OPENERS.length];
   const headline = page.shipmentType.headline(page.city.name);
   const description = page.shipmentType.description(page.city.name);
-  return `${opener} ${page.shipmentType.label} ב${page.city.name}?\n\n${headline}\n${description}\n\nלהצעת מחיר: ${SITE_URL}/lp/${page.slug}`;
+  return `${opener} ${page.shipmentType.label} in ${page.city.name}, ${page.city.country}?\n\n${headline}\n${description}\n\nGet a quote: ${SITE_URL}/lp/${page.slug}`;
 }
 
 export function generateBlogCaption(post: BlogPost): string {
-  return `${post.title}\n\n${post.description}\n\nקראו את המדריך המלא: ${SITE_URL}/blog/${post.slug}`;
+  return `${post.title}\n\n${post.description}\n\nRead the full guide: ${SITE_URL}/blog/${post.slug}`;
 }

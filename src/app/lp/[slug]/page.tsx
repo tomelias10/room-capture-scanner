@@ -24,7 +24,7 @@ export function generateMetadata({
     title,
     description,
     alternates: { canonical: url },
-    openGraph: { title, description, url, siteName: SITE_NAME, locale: "he_IL" },
+    openGraph: { title, description, url, siteName: SITE_NAME, locale: "en_US" },
   };
 }
 
@@ -41,7 +41,7 @@ export default function LandingPage({
     "@type": "Service",
     name: page.shipmentType.headline(page.city.name),
     description: page.shipmentType.description(page.city.name),
-    areaServed: { "@type": "City", name: page.city.name },
+    areaServed: { "@type": "City", name: `${page.city.name}, ${page.city.country}` },
     provider: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
   };
 

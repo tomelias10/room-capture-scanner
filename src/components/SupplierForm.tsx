@@ -17,6 +17,7 @@ export function SupplierForm() {
       name: form.get("name"),
       phone: form.get("phone"),
       category: form.get("category"),
+      country: form.get("country"),
       commissionPct: Number(form.get("commissionPct")) / 100,
       lat: Number(form.get("lat")),
       lng: Number(form.get("lng")),
@@ -38,20 +39,20 @@ export function SupplierForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="lead-form" dir="rtl">
+    <form onSubmit={handleSubmit} className="lead-form">
       <label>
-        שם ספק
+        Supplier name
         <input name="name" required />
       </label>
       <label>
-        טלפון
+        Phone
         <input name="phone" required />
       </label>
       <label>
-        קטגוריה
+        Category
         <select name="category" required defaultValue="">
           <option value="" disabled>
-            בחר סוג משלוח
+            Select a shipment type
           </option>
           {SHIPMENT_TYPES.map((t) => (
             <option key={t.id} value={t.id}>
@@ -61,7 +62,11 @@ export function SupplierForm() {
         </select>
       </label>
       <label>
-        אחוז עמלה (%)
+        Country
+        <input name="country" required placeholder="e.g. United States" />
+      </label>
+      <label>
+        Commission (%)
         <input name="commissionPct" type="number" min={0} max={100} step={1} required />
       </label>
       <label>
@@ -73,9 +78,9 @@ export function SupplierForm() {
         <input name="lng" type="number" step="any" required />
       </label>
       <button type="submit" disabled={status === "saving"}>
-        {status === "saving" ? "שומר..." : "הוסף ספק"}
+        {status === "saving" ? "Saving..." : "Add supplier"}
       </button>
-      {status === "error" && <p className="lead-form-error">שמירה נכשלה</p>}
+      {status === "error" && <p className="lead-form-error">Save failed</p>}
     </form>
   );
 }

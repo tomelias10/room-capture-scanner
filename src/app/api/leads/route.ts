@@ -7,7 +7,7 @@ import { getLandingPage } from "@/lib/landingPages";
 
 const leadSchema = z.object({
   name: z.string().min(2),
-  phone: z.string().min(9),
+  phone: z.string().min(6),
   email: z.string().email().optional().nullable(),
   address: z.string().optional().nullable(),
   region: z.string().min(1),
@@ -23,22 +23,30 @@ export async function POST(req: NextRequest) {
 
   if (!parsed.success) {
     return NextResponse.json(
-      { error: "נתונים לא תקינים או שחסר אישור קבלת פנייה" },
+      { error: "Invalid data, or consent was not given" },
       { status: 400 },
     );
   }
 
   const data = parsed.data;
   const page = getLandingPage(data.source);
+  const country = page?.city.country;
 
   // Fall back to the landing page's city coordinates when no address (or no
   // Google Maps API key) is available, so matching still works.
   const geocoded = data.address ? await geocodeAddress(data.address) : null;
   const origin = geocoded ?? (page ? { lat: page.city.lat, lng: page.city.lng } : null);
 
-  const candidateSuppliers = await prisma.supplier.findMany({
-    where: { active: true, category: data.shipmentType },
+  // Prefer a supplier in the same country; fall back to a global search if
+  // none is available yet (useful in early markets with thin coverage).
+  let candidateSuppliers = await prisma.supplier.findMany({
+    where: { active: true, category: data.shipmentType, ...(country ? { country } : {}) },
   });
+  if (candidateSuppliers.length === 0 && country) {
+    candidateSuppliers = await prisma.supplier.findMany({
+      where: { active: true, category: data.shipmentType },
+    });
+  }
 
   const supplier = origin
     ? nearestByDistance(origin, candidateSuppliers)
@@ -50,6 +58,7 @@ export async function POST(req: NextRequest) {
       phone: data.phone,
       email: data.email ?? undefined,
       region: data.region,
+      country,
       shipmentType: data.shipmentType,
       address: data.address ?? undefined,
       lat: origin?.lat,

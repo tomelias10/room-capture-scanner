@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "פלטפורמת לידים למשלוחים",
-  description: "חיבור בין לקוחות המחפשים משלוח לבין ספקי שילוח מקומיים",
+  title: "Delivery Leads Platform",
+  description: "Connecting customers looking for delivery services with local shipping providers",
 };
 
 export default function RootLayout({
@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="he" dir="rtl">
+    <html lang="en" dir="ltr">
       <body>{children}</body>
     </html>
   );

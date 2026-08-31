@@ -1,93 +1,115 @@
-# פלטפורמת לידים למשלוחים
+# Delivery Leads Platform
 
-מערכת שמחברת בין לקוחות שמחפשים שירותי משלוח/הובלה לבין ספקים, עם עמלה על כל
-עסקה. הלידים מגיעים **בהסכמה מפורשת** (opt-in) דרך דפי נחיתה, ולא דרך גירוד
-או פרסום אוטומטי בקבוצות/פורומים — זה מפר את תנאי השימוש של הפלטפורמות ואת
-חוק הספאם (תיקון 40 לחוק התקשורת), ולכן במכוון לא נתמך כאן.
+A system that connects customers looking for delivery/moving services with
+suppliers, earning a commission on every deal. This is a **global** platform
+- leads can come from any country. Leads arrive through **explicit opt-in**
+(consent) on landing pages, not through scraping or automated posting into
+groups/forums - that would violate those platforms' terms of service and,
+depending on the lead's jurisdiction, spam laws (e.g. GDPR in the EU,
+CAN-SPAM in the US, CASL in Canada, Israel's Telecom Law Amendment 40) - so
+it's intentionally not supported here.
 
-## מה יש כאן
+## What's here
 
-- **50 דפי נחיתה** (`/lp/[slug]`) — קומבינציה של 10 ערים × 5 סוגי משלוח,
-  מוגדרים ב-`src/lib/landingPages.ts`. הוספת עיר/סוג משלוח נוספת = שורה אחת.
-- **טופס ליד עם צ'קבוקס הסכמה חובה** — אי אפשר לשלוח בלי אישור מפורש.
-- **התאמת ספק אוטומטית** — `POST /api/leads` מגאוקד את הכתובת (Google
-  Geocoding API) ומוצא את הספק הפעיל הקרוב ביותר מאותה קטגוריה.
-- **התראת וואטסאפ מיידית** על כל ליד חדש, דרך ה-WhatsApp Cloud API הרשמי של
-  Meta (`src/lib/whatsapp.ts`).
-- **קמפיינים ממומנים אוטומטיים** ב-Facebook/Instagram וב-Google Ads, דרך
-  ה-SDK-ים הרשמיים (`src/lib/ads/`), מופעלים דרך `npm run ads:launch`. כל
-  קמפיין נוצר **במצב מושהה (PAUSED)** בכוונה — יש לבדוק ולהפעיל ידנית ב-Ads
-  Manager, כדי שלא ייווצר תקציב פרסום בלי בקרה אנושית.
-- **לוח ניהול** — `/admin/leads` (רשימת לידים ועמלות), `/admin/suppliers`
-  (רשימת ספקים + טופס הוספה), ו-`/admin/content` (לוח תוכן אורגני).
+- **50 landing pages** (`/lp/[slug]`) - a combination of 10 major cities
+  across different countries × 5 shipment types, defined in
+  `src/lib/landingPages.ts`. Adding another city/country or shipment type
+  is a one-line change; the backend itself isn't limited to this list -
+  any lead, from any country, is accepted and matched.
+- **Lead form with a required consent checkbox** - it can't be submitted
+  without explicit opt-in.
+- **Automatic supplier matching** - `POST /api/leads` geocodes the address
+  (Google Geocoding API) and finds the closest active supplier in the same
+  category, preferring a match in the lead's own country and falling back
+  to a global search if none exists yet.
+- **Instant WhatsApp notification** on every new lead, via Meta's official
+  WhatsApp Cloud API (`src/lib/whatsapp.ts`).
+- **Automated paid campaigns** on Facebook/Instagram and Google Ads, via
+  the official SDKs (`src/lib/ads/`), launched with `npm run ads:launch`.
+  Every campaign is created **PAUSED** on purpose - review and enable it
+  manually in Ads Manager so no ad spend happens without human oversight.
+- **Admin dashboard** - `/admin/leads` (leads + commissions),
+  `/admin/suppliers` (supplier list + add form), and `/admin/content`
+  (organic content calendar).
 
-## שיווק אורגני (בלי תקציב פרסום)
+## Organic marketing (no ad budget)
 
-כל החלק הזה מפרסם רק לערוצים **שבבעלותכם** — עמוד הפייסבוק/אינסטגרם העסקי
-ופרופיל העסק בגוגל שלכם — דרך ה-API הרשמי של כל פלטפורמה. זה שונה מהותית
-מבוט שמפרסם בקבוצות/פורומים של אחרים (שנשאר מחוץ לתחום, גם בלי תקציב —
-ראו למעלה): כאן זה ניהול רגיל של הנכסים הדיגיטליים שלכם, בדיוק כמו כל עסק.
+This entire section only posts to channels **you own** - your business
+Facebook/Instagram Page and your Google Business Profile - via each
+platform's official API. This is fundamentally different from a bot that
+posts into other people's groups/forums (which stays out of scope, budget
+or not - see above): this is just normal management of your own digital
+assets, like any business does.
 
-- **SEO** — לכל אחד מ-50 דפי הנחיתה יש `<title>`/meta description ייחודיים
-  ו-JSON-LD (`Service` schema), יש `/blog` עם 5 מדריכים אמיתיים ומועילים
-  (לא תוכן דליל) שמקשרים חזרה לדפי הנחיתה הרלוונטיים, ויש `sitemap.xml`
-  ו-`robots.txt` אוטומטיים (`src/app/sitemap.ts`, `src/app/robots.ts`) —
-  זו תנועה אורגנית חינמית מגוגל לאורך זמן.
-- **לוח תוכן** — `npm run content:calendar` מייצר 30 יום של פוסטים
-  מתוזמנים (מסתובבים בין 50 דפי הנחיתה ו-5 המדריכים, עם ניסוח משתנה כדי
-  שלא ייראה כמו תוכן משוכפל) לתוך טבלת `SocialPost`.
-- **פרסום בפועל** — `npm run content:post` מפרסם כל פוסט שהגיע זמנו, לעמוד
-  הפייסבוק (`src/lib/social/facebookPage.ts`), לאינסטגרם
-  (`src/lib/social/instagram.ts`) או לפרופיל העסק בגוגל
-  (`src/lib/social/googleBusinessProfile.ts`). הריצו אותו על תזמון (cron,
-  Vercel Cron Job, GitHub Actions scheduled workflow) — למשל פעם בשעה —
-  וכל פוסט שתורו הגיע יפורסם אוטומטית.
-- **חשוב**: פוסטים לאינסטגרם דורשים תמונה אמיתית — `generateContentCalendar`
-  שם כברירת מחדל placeholder ב-`/og-image.jpg` שצריך להחליף בתמונות אמיתיות
-  לפני שהם ירוצו בפועל.
+- **SEO** - each of the 50 landing pages has a unique `<title>`/meta
+  description and `Service` JSON-LD, there's a `/blog` with 5 real, useful
+  guides (not thin content) linking back to the relevant landing pages, and
+  automatic `sitemap.xml`/`robots.txt` (`src/app/sitemap.ts`,
+  `src/app/robots.ts`) - free, compounding organic traffic from Google.
+- **Content calendar** - `npm run content:calendar` generates 30 days of
+  scheduled posts (cycling through the 50 landing pages and 5 guides, with
+  varied phrasing so it doesn't read as duplicate content) into the
+  `SocialPost` table.
+- **Publishing** - `npm run content:post` publishes every post whose time
+  has come, to your Facebook Page (`src/lib/social/facebookPage.ts`),
+  Instagram (`src/lib/social/instagram.ts`), or Google Business Profile
+  (`src/lib/social/googleBusinessProfile.ts`). Run it on a schedule (cron,
+  a Vercel Cron Job, a GitHub Actions scheduled workflow) - e.g. hourly -
+  and every due post publishes automatically.
+- **Important**: Instagram posts need a real image - `generateContentCalendar`
+  defaults to a `/og-image.jpg` placeholder that must be replaced with real
+  images before those posts actually run.
 
-מה שבמכוון **לא** נבנה, ולמה:
+What was intentionally **not** built, and why:
 
-- **פרסום/רישום אוטומטי ב-Yad2 או בפייסבוק מרקטפלייס** — לאף אחת מהפלטפורמות
-  האלה אין API רשמי לפרסום מודעות עבור צד שלישי כמו זה. כתיבת בוט שמדמה
-  משתמש כדי לפרסם שם תפר את תנאי השימוש שלהן, בדיוק כמו פרסום בקבוצות.
-  אם תרצו נוכחות שם, זה דורש פרסום ידני או שימוש בכלי הפרסום הרשמי שהן
-  עצמן מציעות לעסקים.
+- **Automated listing on marketplaces like Craigslist, Yad2, or Facebook
+  Marketplace** - none of these have an official API for posting listings
+  on behalf of a third party like this. A bot that impersonates a user to
+  post there would violate their terms of service, the same problem as
+  posting into groups. If you want a presence there, it requires manual
+  posting or each platform's own official advertising product for
+  businesses.
 
-## הפעלה מקומית
+## Running locally
 
 ```bash
 npm install
-cp .env.example .env   # ומלא את המפתחות שלך
-npm run db:push        # יוצר את בסיס הנתונים לפי prisma/schema.prisma
-npm run db:seed        # מזין כמה ספקים לדוגמה
+cp .env.example .env   # fill in your keys
+npm run db:push        # creates the database from prisma/schema.prisma
+npm run db:seed        # seeds a few sample suppliers
 npm run dev
 ```
 
-האתר יעלה על `http://localhost:3000`. עמוד הבית מציג קישורים לכל 50 דפי
-הנחיתה, ו-`/admin/leads` + `/admin/suppliers` מציגים את הנתונים.
+The site runs on `http://localhost:3000`. The home page links to all 50
+landing pages, and `/admin/leads` + `/admin/suppliers` show the data.
 
-## מפתחות API שצריך להשלים ב-`.env`
+## API keys to fill in `.env`
 
-| משתנה | לאן ללכת |
+| Variable | Where to get it |
 |---|---|
-| `GOOGLE_MAPS_API_KEY` | Google Cloud Console, הפעלת Geocoding API |
+| `GOOGLE_MAPS_API_KEY` | Google Cloud Console, enable the Geocoding API |
 | `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `ADMIN_WHATSAPP_NUMBER` | Meta Business Manager → WhatsApp → API Setup |
 | `FACEBOOK_ACCESS_TOKEN`, `FACEBOOK_AD_ACCOUNT_ID`, `FACEBOOK_PAGE_ID` | Meta Business Manager → Marketing API |
-| `GOOGLE_ADS_*` | Google Ads API — [מדריך רשמי](https://developers.google.com/google-ads/api/docs/get-started) |
-| `FACEBOOK_PAGE_ACCESS_TOKEN` | Meta Business Manager → העמוד שלכם → Page access tokens |
-| `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` | חשבון אינסטגרם עסקי מקושר לעמוד הפייסבוק |
-| `GOOGLE_BUSINESS_*` | Business Profile API — הוראות מלאות ב-`src/lib/social/googleBusinessProfile.ts` |
+| `GOOGLE_ADS_*` | Google Ads API — [official guide](https://developers.google.com/google-ads/api/docs/get-started) |
+| `FACEBOOK_PAGE_ACCESS_TOKEN` | Meta Business Manager → your Page → Page access tokens |
+| `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` | An Instagram professional account linked to your Facebook Page |
+| `GOOGLE_BUSINESS_*` | Business Profile API — full setup steps in `src/lib/social/googleBusinessProfile.ts` |
 
-לפני הרצת `npm run ads:launch` לגוגל, צריך למלא ב-`scripts/createCampaigns.ts`
-את `GEO_TARGET_CONSTANTS` עם מזהי המיקום המספריים של Google Ads לכל עיר
-(נמצאים ב-[רשימת ה-geo targets הרשמית](https://developers.google.com/google-ads/api/data/geotargets)
-או דרך `GeoTargetConstantService`).
+Before running `npm run ads:launch` for Google, fill in
+`GEO_TARGET_CONSTANTS` in `scripts/createCampaigns.ts` with the numeric
+Google Ads location ID for each city (find yours in the
+[official geo targets list](https://developers.google.com/google-ads/api/data/geotargets)
+or via `GeoTargetConstantService`).
 
-## דברים שחשוב להוסיף לפני production
+## Before production
 
-- **אימות (auth)** בעמודי `/admin/*` — כרגע פתוחים לכל מי שיודע את הכתובת.
-- מעבר מ-SQLite ל-Postgres (`DATABASE_URL` + שינוי `provider` ב-`schema.prisma`).
-- תבנית WhatsApp מאושרת (`new_lead_alert`) אם רוצים לשלוח התראות גם מחוץ
-  לחלון שיחה של 24 שעות מול המספר של הלקוח/אדמין.
-- Rate limiting על `POST /api/leads` כדי למנוע spam בטפסים עצמם.
+- **Auth** on `/admin/*` pages - currently open to anyone who knows the URL.
+- Move from SQLite to Postgres (`DATABASE_URL` + change `provider` in
+  `schema.prisma`).
+- An approved WhatsApp template (`new_lead_alert`) if you want to notify
+  outside the 24h session window with the customer/admin number.
+- Rate limiting on `POST /api/leads` to prevent form spam.
+- Since leads and suppliers can be in any country, check which consent/
+  marketing regulations apply where your customers actually are (GDPR,
+  CAN-SPAM, CASL, etc.) - the required consent checkbox here is a baseline,
+  not a substitute for jurisdiction-specific legal review.
