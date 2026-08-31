@@ -13,6 +13,7 @@ export type ShipmentType = {
   id: string;
   label: string;
   headline: (city: string) => string;
+  description: (city: string) => string;
 };
 
 export const CITIES: City[] = [
@@ -33,26 +34,36 @@ export const SHIPMENT_TYPES: ShipmentType[] = [
     id: "local-delivery",
     label: "משלוחים מקומיים",
     headline: (city) => `משלוחים מקומיים מהירים ב${city}`,
+    description: (city) =>
+      `השוואת מחירים בין ספקי משלוחים מקומיים מאומתים ב${city} - קבלו הצעת מחיר תוך דקות.`,
   },
   {
     id: "apartment-moving",
     label: "הובלת דירה",
     headline: (city) => `הובלת דירה מקצועית ב${city}`,
+    description: (city) =>
+      `מחפשים הובלת דירה ב${city}? נתאים לכם חברת הובלות מקומית לפי היקף ותקציב.`,
   },
   {
     id: "international-shipping",
     label: "משלוחים בינלאומיים",
     headline: (city) => `משלוחים בינלאומיים מ${city} לכל העולם`,
+    description: (city) =>
+      `שילוח בינלאומי מ${city} - ספקים מאומתים למשלוחי חבילות ומטענים לחו"ל.`,
   },
   {
     id: "furniture-delivery",
     label: "משלוחי רהיטים",
     headline: (city) => `משלוחי רהיטים וציוד כבד ב${city}`,
+    description: (city) =>
+      `הובלת רהיטים וציוד כבד ב${city} בבטחה ובמחיר הוגן - השוואה בין ספקים.`,
   },
   {
     id: "business-delivery",
     label: "משלוחים עסקיים (B2B)",
     headline: (city) => `פתרונות משלוחים עסקיים ב${city}`,
+    description: (city) =>
+      `פתרונות לוגיסטיקה ומשלוחים עסקיים ב${city} לעסקים קטנים ובינוניים.`,
   },
 ];
 

@@ -52,3 +52,22 @@ model Deal {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
+
+// Organic content calendar: posts to channels the business owns and
+// controls (its own Facebook/Instagram Page, its own Google Business
+// Profile) via each platform's official API. Never third-party groups,
+// forums, or accounts that aren't ours.
+model SocialPost {
+  id            String    @id @default(cuid())
+  platform      String // facebook_page | instagram | google_business
+  content       String
+  imageUrl      String?
+  linkUrl       String? // e.g. the related landing page
+  landingSlug   String? // LandingPageConfig.slug this post promotes
+  scheduledFor  DateTime
+  status        String    @default("pending") // pending | posted | failed
+  externalId    String? // id returned by the platform once posted
+  failureReason String?
+  createdAt     DateTime  @default(now())
+  postedAt      DateTime?
+}

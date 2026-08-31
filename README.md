@@ -18,8 +18,41 @@
   ה-SDK-ים הרשמיים (`src/lib/ads/`), מופעלים דרך `npm run ads:launch`. כל
   קמפיין נוצר **במצב מושהה (PAUSED)** בכוונה — יש לבדוק ולהפעיל ידנית ב-Ads
   Manager, כדי שלא ייווצר תקציב פרסום בלי בקרה אנושית.
-- **לוח ניהול** — `/admin/leads` (רשימת לידים ועמלות) ו-`/admin/suppliers`
-  (רשימת ספקים + טופס הוספה).
+- **לוח ניהול** — `/admin/leads` (רשימת לידים ועמלות), `/admin/suppliers`
+  (רשימת ספקים + טופס הוספה), ו-`/admin/content` (לוח תוכן אורגני).
+
+## שיווק אורגני (בלי תקציב פרסום)
+
+כל החלק הזה מפרסם רק לערוצים **שבבעלותכם** — עמוד הפייסבוק/אינסטגרם העסקי
+ופרופיל העסק בגוגל שלכם — דרך ה-API הרשמי של כל פלטפורמה. זה שונה מהותית
+מבוט שמפרסם בקבוצות/פורומים של אחרים (שנשאר מחוץ לתחום, גם בלי תקציב —
+ראו למעלה): כאן זה ניהול רגיל של הנכסים הדיגיטליים שלכם, בדיוק כמו כל עסק.
+
+- **SEO** — לכל אחד מ-50 דפי הנחיתה יש `<title>`/meta description ייחודיים
+  ו-JSON-LD (`Service` schema), יש `/blog` עם 5 מדריכים אמיתיים ומועילים
+  (לא תוכן דליל) שמקשרים חזרה לדפי הנחיתה הרלוונטיים, ויש `sitemap.xml`
+  ו-`robots.txt` אוטומטיים (`src/app/sitemap.ts`, `src/app/robots.ts`) —
+  זו תנועה אורגנית חינמית מגוגל לאורך זמן.
+- **לוח תוכן** — `npm run content:calendar` מייצר 30 יום של פוסטים
+  מתוזמנים (מסתובבים בין 50 דפי הנחיתה ו-5 המדריכים, עם ניסוח משתנה כדי
+  שלא ייראה כמו תוכן משוכפל) לתוך טבלת `SocialPost`.
+- **פרסום בפועל** — `npm run content:post` מפרסם כל פוסט שהגיע זמנו, לעמוד
+  הפייסבוק (`src/lib/social/facebookPage.ts`), לאינסטגרם
+  (`src/lib/social/instagram.ts`) או לפרופיל העסק בגוגל
+  (`src/lib/social/googleBusinessProfile.ts`). הריצו אותו על תזמון (cron,
+  Vercel Cron Job, GitHub Actions scheduled workflow) — למשל פעם בשעה —
+  וכל פוסט שתורו הגיע יפורסם אוטומטית.
+- **חשוב**: פוסטים לאינסטגרם דורשים תמונה אמיתית — `generateContentCalendar`
+  שם כברירת מחדל placeholder ב-`/og-image.jpg` שצריך להחליף בתמונות אמיתיות
+  לפני שהם ירוצו בפועל.
+
+מה שבמכוון **לא** נבנה, ולמה:
+
+- **פרסום/רישום אוטומטי ב-Yad2 או בפייסבוק מרקטפלייס** — לאף אחת מהפלטפורמות
+  האלה אין API רשמי לפרסום מודעות עבור צד שלישי כמו זה. כתיבת בוט שמדמה
+  משתמש כדי לפרסם שם תפר את תנאי השימוש שלהן, בדיוק כמו פרסום בקבוצות.
+  אם תרצו נוכחות שם, זה דורש פרסום ידני או שימוש בכלי הפרסום הרשמי שהן
+  עצמן מציעות לעסקים.
 
 ## הפעלה מקומית
 
@@ -42,6 +75,9 @@ npm run dev
 | `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `ADMIN_WHATSAPP_NUMBER` | Meta Business Manager → WhatsApp → API Setup |
 | `FACEBOOK_ACCESS_TOKEN`, `FACEBOOK_AD_ACCOUNT_ID`, `FACEBOOK_PAGE_ID` | Meta Business Manager → Marketing API |
 | `GOOGLE_ADS_*` | Google Ads API — [מדריך רשמי](https://developers.google.com/google-ads/api/docs/get-started) |
+| `FACEBOOK_PAGE_ACCESS_TOKEN` | Meta Business Manager → העמוד שלכם → Page access tokens |
+| `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID` | חשבון אינסטגרם עסקי מקושר לעמוד הפייסבוק |
+| `GOOGLE_BUSINESS_*` | Business Profile API — הוראות מלאות ב-`src/lib/social/googleBusinessProfile.ts` |
 
 לפני הרצת `npm run ads:launch` לגוגל, צריך למלא ב-`scripts/createCampaigns.ts`
 את `GEO_TARGET_CONSTANTS` עם מזהי המיקום המספריים של Google Ads לכל עיר

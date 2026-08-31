@@ -10,6 +10,9 @@ export default function HomePage() {
           {LANDING_PAGES.length} דפי נחיתה ממוקדי עיר וסוג משלוח, לבדיקה
           ולקישור מקמפיינים ממומנים.
         </p>
+        <p>
+          <Link href="/blog">מדריכים ומאמרים →</Link>
+        </p>
       </div>
       <div className="index-list">
         {LANDING_PAGES.map((p) => (
