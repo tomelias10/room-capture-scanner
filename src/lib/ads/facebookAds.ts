@@ -8,14 +8,16 @@ import bizSdk from "facebook-nodejs-business-sdk";
 
 const { AdAccount, Campaign, AdSet, AdCreative, Ad, FacebookAdsApi } = bizSdk;
 
+export type FacebookGeoTarget =
+  | { type: "radius"; lat: number; lng: number; radiusKm: number }
+  | { type: "countries"; countryCodes: string[] }; // ISO 3166-1 alpha-2
+
 export type FacebookCampaignInput = {
   name: string;
   headline: string;
   landingPageUrl: string;
-  lat: number;
-  lng: number;
-  radiusKm: number;
-  dailyBudgetCents: number; // smallest currency unit, e.g. agorot/cents
+  geo: FacebookGeoTarget;
+  dailyBudgetCents: number; // smallest currency unit, e.g. cents
 };
 
 export async function createFacebookCampaign(input: FacebookCampaignInput) {
@@ -47,16 +49,19 @@ export async function createFacebookCampaign(input: FacebookCampaignInput) {
     optimization_goal: "LINK_CLICKS",
     bid_strategy: "LOWEST_COST_WITHOUT_CAP",
     targeting: {
-      geo_locations: {
-        custom_locations: [
-          {
-            latitude: input.lat,
-            longitude: input.lng,
-            radius: input.radiusKm,
-            distance_unit: "kilometer",
-          },
-        ],
-      },
+      geo_locations:
+        input.geo.type === "radius"
+          ? {
+              custom_locations: [
+                {
+                  latitude: input.geo.lat,
+                  longitude: input.geo.lng,
+                  radius: input.geo.radiusKm,
+                  distance_unit: "kilometer",
+                },
+              ],
+            }
+          : { countries: input.geo.countryCodes },
       age_min: 18,
     },
     status: "PAUSED",

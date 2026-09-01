@@ -7,11 +7,14 @@
 // for a template call (see commented example) once you have one approved.
 
 export async function notifyNewLead(details: {
-  name: string;
+  contactName: string;
+  company?: string;
+  email: string;
   phone: string;
-  region: string;
-  shipmentType: string;
-  supplierName?: string;
+  route: string;
+  cargo: string;
+  mode: string;
+  channel: string;
 }) {
   const token = process.env.WHATSAPP_TOKEN;
   const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
@@ -23,15 +26,15 @@ export async function notifyNewLead(details: {
   }
 
   const text = [
-    "New lead!",
-    `Name: ${details.name}`,
+    "New freight lead!",
+    `Contact: ${details.contactName}${details.company ? ` (${details.company})` : ""}`,
+    `Email: ${details.email}`,
     `Phone: ${details.phone}`,
-    `Region: ${details.region}`,
-    `Shipment type: ${details.shipmentType}`,
-    details.supplierName ? `Matched supplier: ${details.supplierName}` : null,
-  ]
-    .filter(Boolean)
-    .join("\n");
+    `Route: ${details.route}`,
+    `Cargo: ${details.cargo}`,
+    `Mode: ${details.mode}`,
+    `Channel: ${details.channel}`,
+  ].join("\n");
 
   const res = await fetch(
     `https://graph.facebook.com/v20.0/${phoneNumberId}/messages`,

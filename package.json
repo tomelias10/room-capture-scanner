@@ -1,5 +1,5 @@
 {
-  "name": "delivery-leads-platform",
+  "name": "sourcelane",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,19 +8,20 @@
     "start": "next start",
     "lint": "next lint",
     "db:push": "prisma db push",
-    "db:seed": "tsx scripts/seed.ts",
     "ads:launch": "tsx scripts/createCampaigns.ts",
     "content:calendar": "tsx scripts/generateContentCalendar.ts",
     "content:post": "tsx scripts/postScheduledContent.ts"
   },
   "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
     "@prisma/client": "^5.19.1",
     "facebook-nodejs-business-sdk": "^19.0.3",
     "google-ads-api": "^17.1.0",
+    "mcp-handler": "^2.0.0",
     "next": "^14.2.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "zod": "^3.23.8"
+    "zod": "^4.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.15",

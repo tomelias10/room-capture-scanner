@@ -1,82 +1,75 @@
-// Real, useful articles for organic SEO traffic - not thin/spun content.
-// Each links back to relevant landing pages via a call-to-action.
+// A handful of real, useful freight articles - not a development priority
+// (the landing pages are), kept lean. Each links to a few relevant
+// landing pages by slug.
 
 export type BlogPost = {
   slug: string;
   title: string;
   description: string;
   publishedAt: string; // ISO date
-  relatedShipmentType: string; // id from SHIPMENT_TYPES
+  relatedSlugs: string[]; // LandingPage.slug values
   paragraphs: string[];
 };
 
 export const BLOG_POSTS: BlogPost[] = [
   {
-    slug: "how-much-does-moving-cost",
-    title: "How much does an apartment move cost? A 2026 pricing guide",
-    description:
-      "The factors that drive moving costs - room count, floor access, distance, and special items.",
+    slug: "fcl-vs-lcl-shipping",
+    title: "FCL vs LCL: which one should you ship?",
+    description: "How Full Container Load and Less than Container Load compare, and when each makes sense.",
     publishedAt: "2026-01-15",
-    relatedShipmentType: "apartment-moving",
+    relatedSlugs: ["fcl-shipping", "lcl-shipping"],
     paragraphs: [
-      "Moving costs vary widely depending on where you are, but the same handful of factors drive the price everywhere: how many rooms and how much furniture, floor access (elevator vs. stairs), distance between addresses, and any special items like a piano or a large wardrobe.",
-      "To save money, plan ahead: pack boxes yourself, disassemble large furniture in advance, and schedule your move mid-week when demand - and pricing - is usually lower. Weekends and month-end are typically the most expensive slots.",
-      "Make sure any mover you hire carries valid insurance for your belongings, and get a written quote up front that lists everything included, so there are no surprise charges on moving day.",
-      "The simplest way to compare pricing is to get a few quotes from providers in your area and check exactly what's covered in each one.",
+      "FCL (Full Container Load) means your cargo has an entire container to itself. It's the more predictable option, and generally more cost-effective once your cargo fills roughly half a container or more, since you're not sharing space or waiting on other shippers.",
+      "LCL (Less than Container Load) consolidates your cargo with other shippers' goods in a shared container, so you only pay for the volume you use. It's typically the better economic choice for smaller shipments, but transit times are usually longer because of the extra consolidation and deconsolidation steps at each end.",
+      "The crossover point depends on your specific rates and route, but as a rule of thumb: below about half a container's worth of cargo, LCL is usually more economical; above that, FCL usually wins on both cost and simplicity.",
     ],
   },
   {
-    slug: "international-shipping-guide",
-    title: "The international shipping guide: customs, timelines, and cost",
-    description:
-      "What to know before sending a package or freight abroad - documentation, customs, and delivery times.",
+    slug: "exw-vs-fob-vs-ddp",
+    title: "EXW vs FOB vs DDP: understanding Incoterms",
+    description: "What the most common Incoterms mean for who handles what - and who pays for it.",
     publishedAt: "2026-02-03",
-    relatedShipmentType: "international-shipping",
+    relatedSlugs: ["ddp-shipping", "freight-forwarder"],
     paragraphs: [
-      "International shipping involves a few things domestic shipping doesn't: customs declarations, carrier weight/volume limits, and delivery windows that can range from a few days (air express) to several weeks (sea freight).",
-      "Before you ship, check the customs requirements at the destination - some countries require a commercial invoice, others restrict certain product categories. Proper padding and packaging matters even more on long-haul shipments.",
-      "On cost: express air freight is faster but pricier, while sea freight is far cheaper but much slower, and mainly makes sense for large, non-urgent cargo.",
-      "It's worth comparing a few carriers to find the right balance of price and delivery time, and to make sure your shipment has tracking the whole way.",
+      "Incoterms define exactly where responsibility for a shipment shifts from seller to buyer. Under EXW (Ex Works), the buyer takes on everything from the seller's door onward - export clearance, main transport, import clearance, delivery. It's the lowest price from the seller, but the most work for the buyer.",
+      "Under FOB (Free on Board), the seller handles export clearance and loading the cargo onto the vessel at the origin port; the buyer takes over from there, arranging and paying for the main transport and import side.",
+      "Under DDP (Delivered Duty Paid), the seller (or their forwarder) handles the entire journey, including destination customs clearance and duties - the buyer simply receives the goods. It costs more, but it's the simplest option if you don't want to deal with customs yourself.",
     ],
   },
   {
-    slug: "choosing-a-local-courier",
-    title: "How to choose a local courier for your business",
-    description:
-      "What to look for in a local delivery provider - coverage area, reliability, and pricing.",
+    slug: "air-vs-sea-freight",
+    title: "Air freight vs sea freight: how to choose",
+    description: "The real trade-offs between speed and cost when deciding how to ship.",
     publishedAt: "2026-02-20",
-    relatedShipmentType: "local-delivery",
+    relatedSlugs: ["air-freight-quote", "fcl-shipping"],
     paragraphs: [
-      "For businesses that run regular local deliveries - an online store, a restaurant, or a service business - choosing the right courier partner directly affects customer satisfaction.",
-      "Check how fast a provider can pick up and deliver in your service area, whether they offer end-customer tracking, and what happens when an address is wrong or a customer isn't available.",
-      "Local delivery pricing is usually based on distance and package size/weight. High-volume businesses can often negotiate a flat monthly rate instead of paying per delivery.",
-      "It's worth starting with a handful of trial deliveries before committing to a long-term contract, to confirm service quality and reliability.",
+      "Sea freight is the default for most international cargo - it's far cheaper per kilogram, and well suited to large or heavy shipments that aren't time-critical.",
+      "Air freight costs significantly more, but moves in days rather than weeks. It makes sense for urgent orders, high-value or lightweight goods, or when a delay would cost more than the freight itself.",
+      "Many businesses use both: sea freight for routine restocking, and air freight as a fallback when something needs to move fast. Knowing your cargo-ready date and how firm your deadline is will usually settle the decision.",
     ],
   },
   {
-    slug: "moving-furniture-safely",
-    title: "5 tips for moving furniture and heavy items without damage",
-    description: "How to pack and transport large furniture and heavy equipment safely.",
+    slug: "documents-needed-for-international-shipping",
+    title: "What documents do you need for an international shipment?",
+    description: "The paperwork that comes up on most freight shipments, and what it's for.",
     publishedAt: "2026-03-05",
-    relatedShipmentType: "furniture-delivery",
+    relatedSlugs: ["freight-forwarder"],
     paragraphs: [
-      "Large furniture - wardrobes, sofas, mattresses - needs proper padding and securing to arrive without scratches or breaks. Moving blankets and tie-down straps are standard practice for professional movers.",
-      "Before the move, disassemble removable parts (legs, shelves) separately, and bag and label small hardware like screws so nothing gets lost.",
-      "Heavy items like refrigerators or pianos usually require two people and dedicated straps or dollies - make sure whoever you hire has real experience with your specific item.",
-      "Contents insurance isn't a luxury, especially for expensive pieces, and most serious moving companies offer it as a small add-on to the price.",
+      "A commercial invoice and packing list are standard on almost every international shipment - they describe what's being shipped, its value, and how it's packed.",
+      "A bill of lading (for sea freight) or air waybill (for air freight) is the transport document issued by the carrier, and typically needed to release the cargo at destination.",
+      "Depending on the goods and the destination country, you may also need a certificate of origin or product-specific certification. Requirements vary by product and country, so it's worth confirming what applies to your shipment early rather than at the port.",
     ],
   },
   {
-    slug: "b2b-logistics-for-small-business",
-    title: "Business delivery logistics: what small businesses should know",
-    description: "How small and mid-sized businesses choose a logistics partner for recurring deliveries.",
+    slug: "when-does-ddp-make-sense",
+    title: "When does DDP shipping make sense?",
+    description: "Delivered Duty Paid shifts the whole journey - including customs - onto the seller. Here's when that's worth it.",
     publishedAt: "2026-03-22",
-    relatedShipmentType: "business-delivery",
+    relatedSlugs: ["ddp-shipping"],
     paragraphs: [
-      "Businesses with regular B2B deliveries usually benefit from a standing agreement with a logistics provider rather than booking one-off shipments - it unlocks lower rates and more predictable scheduling.",
-      "Key things to check: fixed pickup windows, the provider's ability to handle variable volume (peak vs. off-peak), and whether they integrate with your inventory or CRM system.",
-      "For businesses shipping between cities, also check the provider's branch/hub network - the wider the network, the shorter the delivery times tend to be.",
-      "Transparent pricing and monthly delivery reports are a good sign of a logistics partner that's set up for a long-term relationship.",
+      "DDP (Delivered Duty Paid) puts the seller or their forwarder in charge of the entire shipment, including destination customs clearance and duty payment - the buyer just receives the goods, no customs involvement required.",
+      "It tends to make the most sense for buyers who are unfamiliar with the destination country's import process, or who simply want one predictable, all-in cost rather than dealing with customs brokers themselves.",
+      "The trade-off is cost: DDP is usually the most expensive Incoterm, since the seller is pricing in the risk and effort of handling customs on the buyer's behalf. For experienced importers with their own customs setup, terms like FOB or EXW are often more cost-effective.",
     ],
   },
 ];

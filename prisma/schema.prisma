@@ -1,4 +1,4 @@
-// Data model for the delivery leads platform.
+// Data model for the freight lead-generation platform.
 // Default datasource is SQLite for zero-config local dev.
 // For production, switch provider to "postgresql" and set DATABASE_URL.
 generator client {
@@ -10,49 +10,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Supplier {
-  id            String   @id @default(cuid())
-  name          String
-  phone         String
-  category      String // matches LandingPageConfig.shipmentType, e.g. "local_delivery"
-  country       String // e.g. "United States" - used to prefer in-country matches
-  commissionPct Float // e.g. 0.10 = 10%
-  lat           Float
-  lng           Float
-  active        Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  deals         Deal[]
-}
-
+// A single freight requirement submitted through a landing page, the REST
+// endpoint, or the MCP tool - all three go through the same lib/leads.ts
+// pipeline, so this is the one and only lead table.
 model Lead {
-  id           String   @id @default(cuid())
-  name         String
-  phone        String
-  email        String?
-  region       String
-  country      String?
-  shipmentType String
-  address      String?
-  lat          Float?
-  lng          Float?
-  consent      Boolean  @default(false)
-  source       String? // landing page slug this lead came from
-  createdAt    DateTime @default(now())
-  deal         Deal?
-}
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
 
-model Deal {
-  id            String   @id @default(cuid())
-  leadId        String   @unique
-  lead          Lead     @relation(fields: [leadId], references: [id])
-  supplierId    String
-  supplier      Supplier @relation(fields: [supplierId], references: [id])
-  status        String   @default("pending") // pending | confirmed | completed | cancelled
-  dealValue     Float?
-  commissionPct Float
-  commissionAmt Float?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  // Where it came from
+  sourceSlug String? // landing page slug, e.g. "shanghai-freight-forwarding"
+  sourceUrl  String? // full URL the visitor was on
+  channel    String  @default("web") // web | api | mcp
+
+  // Contact
+  contactName String
+  company     String?
+  email       String
+  phone       String
+
+  // Shipment
+  originCountry      String
+  originCity         String?
+  destinationCountry String
+  destinationCity    String?
+  cargo              String
+  quantity           String?
+  weightKg           Float?
+  cbm                Float?
+  packageCount       Int?
+  mode               String // sea | air | road | rail | not_sure
+  container          String? // LCL | 20GP | 40GP | 40HQ | not_sure
+  incoterm           String? // EXW | FCA | FOB | CIF | DAP | DDP | not_sure
+  cargoReadyDate     String?
+  specialRequirements String?
+  notes              String?
+
+  consent Boolean @default(false)
+
+  // Internal pipeline - private, admin-only
+  status     String @default("NEW") // NEW | CONTACTED | QUALIFIED | QUOTE_IN_PROGRESS | QUOTE_SENT | WON | LOST
+  adminNotes String?
 }
 
 // Organic content calendar: posts to channels the business owns and
@@ -64,11 +61,11 @@ model SocialPost {
   platform      String // facebook_page | instagram | google_business
   content       String
   imageUrl      String?
-  linkUrl       String? // e.g. the related landing page
-  landingSlug   String? // LandingPageConfig.slug this post promotes
+  linkUrl       String?
+  landingSlug   String?
   scheduledFor  DateTime
   status        String    @default("pending") // pending | posted | failed
-  externalId    String? // id returned by the platform once posted
+  externalId    String?
   failureReason String?
   createdAt     DateTime  @default(now())
   postedAt      DateTime?

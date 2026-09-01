@@ -63,18 +63,53 @@ body {
   color: var(--muted);
 }
 
-.lead-form input[type="text"],
-.lead-form input:not([type="checkbox"]) {
+.lead-form input:not([type="checkbox"]),
+.lead-form select,
+.lead-form textarea {
   padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 1rem;
+  font-family: inherit;
+  background: var(--card);
+  color: var(--text);
+}
+
+.lead-form textarea {
+  resize: vertical;
+}
+
+.lead-form h3 {
+  margin: 8px 0 -4px;
+  font-size: 1rem;
+  color: var(--text);
 }
 
 .lead-form label.consent {
   flex-direction: row;
   align-items: flex-start;
   gap: 8px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Honeypot: invisible to real visitors, present in the DOM for bots */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 .lead-form button {
@@ -130,7 +165,43 @@ table.admin-table {
 
 table.admin-table th,
 table.admin-table td {
-  text-align: right;
+  text-align: left;
   padding: 8px 10px;
   border-bottom: 1px solid var(--border);
+}
+
+.breadcrumbs {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.breadcrumbs a {
+  color: var(--muted);
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faq-list dt {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.faq-list dd {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--border);
 }

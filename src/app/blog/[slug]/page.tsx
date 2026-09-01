@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
 import { BLOG_POSTS, getBlogPost } from "@/lib/blog";
-import { LANDING_PAGES } from "@/lib/landingPages";
+import { getLandingPage } from "@/lib/landingPages";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -37,9 +37,9 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = getBlogPost(decodeURIComponent(params.slug));
   if (!post) notFound();
 
-  const relatedPages = LANDING_PAGES.filter(
-    (p) => p.shipmentType.id === post.relatedShipmentType,
-  ).slice(0, 5);
+  const relatedPages = post.relatedSlugs
+    .map((slug) => getLandingPage(slug))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -71,11 +71,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
       {relatedPages.length > 0 && (
         <div className="card" style={{ marginTop: 20 }}>
-          <h3 style={{ marginTop: 0 }}>Get a quote in your area</h3>
+          <h3 style={{ marginTop: 0 }}>Related pages</h3>
           <div className="index-list">
             {relatedPages.map((p) => (
               <Link key={p.slug} href={`/lp/${p.slug}`}>
-                {p.shipmentType.label} · {p.city.name}, {p.city.country}
+                {p.h1}
               </Link>
             ))}
           </div>
